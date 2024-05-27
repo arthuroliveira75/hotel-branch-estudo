@@ -1,11 +1,13 @@
 import { 
   HttpEvent, 
   HttpHandler, 
+  HttpHeaders, 
   HttpInterceptor, 
   HttpInterceptorFn, 
   HttpRequest 
 } from '@angular/common/http';
 import { Injectable, AfterContentInit } from '@angular/core';
+import { request } from 'express';
 import { Observable } from 'rxjs';
 
 
@@ -15,11 +17,17 @@ export class RequestInterceptor implements HttpInterceptor {
 
   constructor () {}
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler):Observable<HttpEvent<unknown>> 
-  {
-    debugger;
-    console.log('Request Interceptor', req);
-    return next.handle(req);
+  intercept(request: HttpRequest<any>, 
+    next: HttpHandler
+  ):Observable<HttpEvent<any>> {
+    console.log('Request Interceptor', request);
+    if(request.method === 'POST'){
+    const newRequest = request.clone({
+       headers: new HttpHeaders({ token: '1231231244fsdfas' })
+    });
+    return next.handle(newRequest);
+    }
+    return next.handle(request);
   } 
 }
 

@@ -17,12 +17,8 @@ export class RoomsService {
     throw new Error('Method not implemented.');
   }
   roomList: RoomList[] = [];
-  headers = new HttpHeaders({ token: '123123123123sdsdasd' });
-  getRooms$ = this.htpp.get<RoomList[]>('/api/rooms', {
-    headers: this.headers,
-  }).pipe(
-    shareReplay(1)
-  );
+  // headers = new HttpHeaders({ token: '123123123123sdsdasd' });
+  getRooms$ = this.htpp.get<RoomList[]>('/api/rooms').pipe(shareReplay(1));
 
   constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig,
     private htpp: HttpClient) {
@@ -35,10 +31,7 @@ export class RoomsService {
   }
 
   addRoom(room: RoomList) {
-    return this.htpp.post<RoomList[]>('/api/rooms', room, {
-      headers: this.headers,
-      
-    });
+    return this.htpp.post<RoomList[]>('/api/rooms', room);
   }
 
   editRoom(room: RoomList) {

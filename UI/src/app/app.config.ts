@@ -1,15 +1,25 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, Provider, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { RequestInterceptor } from './request.interceptor';
+
+/** Provider for the Noop Interceptor. */
+export const noopRequestInterceptor: Provider =
+  { 
+    provide: HTTP_INTERCEPTORS, 
+    useClass: RequestInterceptor,
+    multi: true 
+  };
+
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), 
+    provideRouter(routes),
     provideHttpClient(),
     importProvidersFrom(HttpClientModule),
-    RequestInterceptor
+    noopRequestInterceptor,
   ]
 };
 
